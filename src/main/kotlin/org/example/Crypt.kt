@@ -7,7 +7,8 @@ fun crypt(inputName: String, key: String, outputName: String) {
     var position = 0
     val writer = File(outputName).bufferedWriter()
     try {
-        for (line in File(inputName).readLines()) {
+        val file = File(inputName)
+        for (line in file.readLines()) {
             var cryptLine = ""
             for (i in line.indices) {
                 if (position == key.length) position = 0

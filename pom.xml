@@ -40,6 +40,12 @@
             <artifactId>args4j</artifactId>
             <version>2.33</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -82,7 +88,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.example.HelloKt</mainClass>
+                            <mainClass>org.example.LauncherKt</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -100,7 +106,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.example.HelloKt</mainClass>
+                            <mainClass>org.example.LauncherKt</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
