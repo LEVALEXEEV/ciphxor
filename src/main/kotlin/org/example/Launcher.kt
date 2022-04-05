@@ -4,7 +4,7 @@ import org.kohsuke.args4j.Argument
 import org.kohsuke.args4j.CmdLineParser
 import org.kohsuke.args4j.Option
 import org.kohsuke.args4j.CmdLineException
-import java.math.BigInteger
+
 
 fun main(args: Array<String>) {
     CiphxorLauncher().launch(args)
@@ -34,14 +34,18 @@ class CiphxorLauncher {
             parser.parseArgument(a)
             if (encryptKey == "" && decryptKey == "") throw CmdLineException("Не указан колюч кодировки")
             if (encryptKey != "") {
-                if (encryptKey.length % 2 == 1 || Regex("[1-9]|[a-f]").find(encryptKey) == null)
+                if (encryptKey.length % 2 == 1 || Regex("[0-9]|[a-f]").find(encryptKey) == null)
                     throw CmdLineException("Неверный формат ключа")
-                if (outputFileName == ".") outputFileName = inputFileName.removeSuffix(".txt") + "Encrypted.txt"
+                if (outputFileName == ".") outputFileName =
+                    inputFileName.removeSuffix('.' + inputFileName.substringAfterLast('.')) +
+                    "Encrypted." + inputFileName.substringAfterLast('.')
                 key = keyBuilder(encryptKey)
             } else {
-                if (decryptKey.length % 2 == 1 || Regex("[1-9]|[a-f]").find(decryptKey) == null)
+                if (decryptKey.length % 2 == 1 || Regex("[0-9]|[a-f]").find(decryptKey) == null)
                     throw CmdLineException("Неверный формат ключа")
-                if (outputFileName == ".") outputFileName = inputFileName.removeSuffix(".txt") + "Decrypted.txt"
+                if (outputFileName == ".") outputFileName =
+                    inputFileName.removeSuffix('.' + inputFileName.substringAfterLast('.')) +
+                    "Decrypted." + inputFileName.substringAfterLast('.')
                 key = keyBuilder(decryptKey)
             }
             crypt(inputFileName, key, outputFileName)
@@ -57,12 +61,10 @@ fun keyBuilder(key: String): String {
     for (i in key.indices){
         k += key[i]
         if (i % 2 == 1){
-            val r = BigInteger(k, 16).toInt()
+            val r = k.toInt(16)
             result += r.toChar()
             k = ""
         }
     }
     return result
 }
-
-
