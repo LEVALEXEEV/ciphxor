@@ -5,13 +5,15 @@ import org.junit.Test
 import java.io.File
 
 
-class HelloTest {
+class Test {
 
     private fun assertFileContent(name: String, expected: String) {
         val file = File(name)
         val content = file.readLines().joinToString("\n")
         assertEquals(expected, content)
     }
+
+
 
     @Test
     fun keyBuilder() {
@@ -31,8 +33,25 @@ class HelloTest {
             keyBuilder("11"),
             "testEncrypted.txt",
             "ppppppppppppppppppppppppppppppppppppppppppppppp\n" +
-                    "ppppppppppppppppppppppppppppppppppppppppppppppp\n" +
-                    "sssssssssssssssssssssssssssssssssssssssssssssss"
+                "ppppppppppppppppppppppppppppppppppppppppppppppp\n" +
+                "sssssssssssssssssssssssssssssssssssssssssssssss"
         )
+    }
+
+    @Test
+    fun ciphxor() {
+        fun test(args: Array<String>, res: String) {
+            main(args)
+            assertFileContent("testEncrypted.txt", res)
+            File("testEncrypted.txt").delete()
+        }
+        test(arrayOf("-c","11", "test.txt"),
+            "ppppppppppppppppppppppppppppppppppppppppppppppp\n" +
+                "ppppppppppppppppppppppppppppppppppppppppppppppp\n" +
+                "sssssssssssssssssssssssssssssssssssssssssssssss")
+        test(arrayOf("-d","11", "test2.txt", "-o", "testEncrypted.txt"),
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n" +
+                "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
     }
 }

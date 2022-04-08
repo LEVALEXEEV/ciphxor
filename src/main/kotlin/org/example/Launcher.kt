@@ -34,7 +34,7 @@ class CiphxorLauncher {
             parser.parseArgument(a)
             if (encryptKey == "" && decryptKey == "") throw CmdLineException("Не указан колюч кодировки")
             if (encryptKey != "") {
-                if (encryptKey.length % 2 == 1 || Regex("[0-9]|[a-f]").find(encryptKey) == null)
+                if (encryptKey.length % 2 == 1 || !encryptKey.matches(Regex("[0-9]+|[a-f]+")))
                     throw CmdLineException("Неверный формат ключа")
                 if (outputFileName == ".") outputFileName =
                     inputFileName.removeSuffix('.' + inputFileName.substringAfterLast('.')) +
