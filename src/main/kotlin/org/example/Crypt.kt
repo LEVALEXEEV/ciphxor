@@ -1,25 +1,40 @@
 package org.example
 
 import java.io.File
-import java.io.FileNotFoundException
 
-fun crypt(inputName: String, key: String, outputName: String) {
+fun crypt(input: File, k: String, output: File) {
+    val key = makeKey(k)
     var position = 0
-    val writer = File(outputName).bufferedWriter()
-    try {
-        val file = File(inputName)
-        for (line in file.readLines()) {
+    val writer = output.bufferedWriter()
+    writer.use {
+        for (line in input.readLines()) {
             var cryptLine = ""
-            for (i in line.indices) {
-                if (position == key.length) position = 0
-                cryptLine += (line[i].code xor key[position].code).toChar()
+            for (i in line) {
+                var p1 = i.code / 32
+                var p2 = i.code % 32
+                p1 = p1 xor key[position]
                 position++
+                if (position == key.size) position = 0
+                p2 = p2 xor key[position]
+                position++
+                if (position == key.size) position = 0
+                cryptLine += (p1 * 32 + p2).toChar()
             }
-            writer.write(cryptLine)
-            writer.newLine()
+            it.write(cryptLine)
+            it.newLine()
         }
-    } catch (E: FileNotFoundException) {
-        println("File is not found")
     }
-    writer.close()
+}
+
+fun makeKey(key: String): List<Int> {
+    val bytes = mutableListOf<Int>()
+    var k = ""
+    for (i in key.indices) {
+        k += key[i]
+        if (i % 2 == 1) {
+            bytes.add(k.toInt(16))
+            k = ""
+        }
+    }
+    return bytes
 }
